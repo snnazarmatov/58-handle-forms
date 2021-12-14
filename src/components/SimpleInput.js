@@ -1,77 +1,76 @@
-import React, {useState, useEffect} from "react";
+import useInput from './custom-hook/use-input'
 
 const SimpleInput = (props) => {
-  const [enteredName, setEnteredName] = useState('');
-  //input ту иштеткенде гана проверка болот
-  const [enterednameToched, setEnterednameToched] = useState(false);
-  // const [formIsValid, setFormIsValid] = useState(false);
+  //username
+  const {
+    value: enteredName,
+    isValid: enteredNameIsValid,
+    hasError: nameInputHasError,
+    valueChangeHandler: nameChangeHandler,
+    inputBlurHandler: nameInputBlurHandler
+} = useInput(value => value.trim() !== '' )
 
-  const enteredNameIsValid = enteredName.trim() !== '';
-  const nameInputIsValid = !enteredNameIsValid && enterednameToched;
+//useremail
+  const {
+    value: enteredEmail,
+    isValid: enteredEmailIsValid,
+    hasError: emailInputHasError,
+    valueChangeHandler: emailChangeHandler,
+    inputBlurHandler: emailInputBlurHandler
+} = useInput(value => value.includes('@'));
 
-  //проверка без useEffect
+
+
+
+
   let formIsValid = false;
-  if(enteredNameIsValid) {
+  if(enteredNameIsValid && enteredEmailIsValid) {
     formIsValid = true;
   }
+ 
   
-  //**проверка на основе useEffect */
-  // useEffect(() => {
-  //   if(enteredNameIsValid){
-  //      setFormIsValid(true);
-  //   } else {
-  //     setFormIsValid(false)
-  //   }
-  // }, [enteredNameIsValid]);
-
-  //*** */
-
-  const nameInputChangeHandler = (e) => {
-    setEnteredName(e.target.value);
-//проверка на основе каждова нажатии клавиши
-    if(enteredName.trim() !== ''){
-    }
-
-  };
-//**2 проверка на основе onBlur*/
-  const nameinputBlurHandler = (e) => {
-    setEnterednameToched(true)
-
-    // if(enteredName.trim() === ''){
-    //   setEnteredNameIsValid(false)
-    //   return;
-    // }
-
-  }
-  //** */
-
   const formSubmitHandler = (e) => {
     e.preventDefault();
+   
 
-    setEnterednameToched(true)
-    //1
     if(!enteredNameIsValid) return;
-    setEnteredName('');
     console.log(enteredName);
-    setEnterednameToched(false)
+    console.log(enteredEmail);
   }
 
   
 
-  const nameInputClasses = !enteredNameIsValid && enterednameToched ? "form-control error-text" : "form-control ";
+  const nameInputClasses = nameInputHasError ? "form-control error-text" : "form-control ";
+
+  const emailInputClasses = emailInputHasError ? "form-control error-text" : "form-control ";
 
   return (
     <form onSubmit={formSubmitHandler}>
+
+      {/* username */}
     <div className={nameInputClasses}>
         <label htmlFor='name'>Your Name</label>
         <input 
           type='text' 
           id='name' 
-          onChange={nameInputChangeHandler}
-          onBlur={nameinputBlurHandler}
+          onChange={nameChangeHandler}
+          onBlur={nameInputBlurHandler}
           value={enteredName}
         />
-        {nameInputIsValid && <p>Name must not be empty</p>}
+        {nameInputHasError && <p>Name must not be empty</p>}
+      </div>
+
+      {/* useremail */}
+    <div className={emailInputClasses}>
+        <label htmlFor='name'>Your Email</label>
+        <input 
+          type='text' 
+          id='name' 
+          onChange={emailChangeHandler}
+          onBlur={emailInputBlurHandler}
+          value={enteredEmail}
+        />
+        {emailInputHasError && <p>Email must not be invalid</p>}
       </div>
       <div className="form-actions">
         <button disabled={!formIsValid}>Submit</button>
