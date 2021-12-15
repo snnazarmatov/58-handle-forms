@@ -47,7 +47,7 @@ const SimpleInput = (props) => {
 
   const formSubmitHandler = (e) => {
     e.preventDefault();
-
+//input ка тийгенде проверка башталат
     setEnterednameToched(true)
     //1
     if(!enteredNameIsValid) return;
