@@ -42,11 +42,11 @@ const BasicForm = (props) => {
     console.log(enteredEmail);
 
   }
-
+  
   const firsNameInputClasses = firstNameHasError ? "form-control error-text" : "form-control ";
   const LastNameInputClasses = LastNameHasError ? "form-control error-text" : "form-control ";
   const emailInputClasses = emailHasError ? "form-control error-text" : "form-control ";
-
+  
   return (
     <form onSubmit={formSubmitHandler}>
       <div className='control-group'>
@@ -84,7 +84,6 @@ const BasicForm = (props) => {
         id='name' 
         onChange={emailChangeHandler}
         onBlur={emailBlurHandler}
-        value={enteredEmail}
         />
         {emailHasError && <p>email must not be invalid</p>}
       </div>
